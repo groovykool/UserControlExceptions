@@ -28,9 +28,25 @@ namespace UserControlExceptions
       }
     }
 
+    //Use event to pass exception due to a flaw in the try/catch exception scheme
+    public event EventHandler<Exception> LoadFailed;
+
+    public void RaiseLoadFailedEvent(Exception ex)
+    {
+      this.LoadFailed?.Invoke(this, ex);
+    }
+
+
     private void ViewExcept_Loaded(object sender, RoutedEventArgs e)
     {
-       throw new Exception("Test exception was thrown");
+      try
+      {
+        throw new Exception("Test exception was thrown");
+      }
+      catch (Exception ex)
+      {
+        RaiseLoadFailedEvent(ex);
+      }
     }
 
     
